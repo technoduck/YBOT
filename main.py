@@ -51,6 +51,7 @@ class MainWindow(QWebView):
             print(self.proxi_ip)
             print(self.proxi_port)
 
+
 if __name__ == '__main__':
 
         import sys
