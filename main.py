@@ -22,12 +22,12 @@ class MainWindow(QWebView):
                 self.show()
 
         def newsite(self):
-            if(self.request()):
-                QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, self.proxi_ip, self.proxi_port))
-            else:
-                self.request()
+            while not self.request():
+                print('Proxy bad')
+
+            QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, self.proxi_ip, self.proxi_port))
           #self.load(QUrl('https://youtu.be/5-a_fzNAB3A'))
-            self.load(QUrl('https://2ip.ru'))
+            self.load(QUrl('https://www.youtube.com/watch?v=-oV8nNeLpjY'))
 
         def request(self):
             self.proxi()
