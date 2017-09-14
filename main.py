@@ -1,7 +1,7 @@
 from urllib3 import ProxyManager, make_headers
-
+import sys
 import time
-from PyQt5.QtCore import QFile, QIODevice, Qt, QTextStream, QUrl
+from PyQt5.QtCore import QFile, QIODevice, Qt, QTextStream, QTimer, QUrl
 from PyQt5.QtWidgets import (QAction, QApplication, QLineEdit, QMainWindow,
         QSizePolicy, QStyle, QTextEdit)
 from PyQt5.QtNetwork import QNetworkProxyFactory, QNetworkRequest,QNetworkProxy
@@ -16,10 +16,27 @@ class MainWindow(QWebView):
 
         def initUI(self):
                 self.setGeometry(100, 100, 1050, 550)
+                self.fin = False
+                self.start = False
                 self.setWindowTitle('Safari')
-                self.load(QUrl('https://2ip.ru'))
-                self.loadFinished.connect(self.newsite)
+                self.load(QUrl('https://youtu.be/5-a_fzNAB3A'))
                 self.show()
+                self.loadFinished.connect(self.finished)
+                self.loadStarted.connect(self.started)
+                
+        def finished(self):
+                self.fin = True
+                self.loading()
+        def started(self):
+                if(self.fin):
+                        self.start = True
+                        self.loading()
+        def loading(self):
+                 if (self.fin & self.start):
+                         self.fin=False
+                         self.start=False
+                         self.newsite()
+
 
         def newsite(self):
             while not self.request():
@@ -27,7 +44,10 @@ class MainWindow(QWebView):
 
             QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, self.proxi_ip, self.proxi_port))
           #self.load(QUrl('https://youtu.be/5-a_fzNAB3A'))
-            self.load(QUrl('https://www.youtube.com/watch?v=-oV8nNeLpjY'))
+            self.load(QUrl('https://youtu.be/5-a_fzNAB3A'))
+
+            return True
+
 
         def request(self):
             self.proxi()
@@ -53,9 +73,6 @@ class MainWindow(QWebView):
 
 
 if __name__ == '__main__':
-
-        import sys
-
         app = QApplication(sys.argv)
   #      QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, "5.135.195.166", 3128))
         #print(s[0])
